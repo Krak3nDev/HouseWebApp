@@ -1,0 +1,42 @@
+@import "../../assets/styles/variables";
+
+.ratingScale {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 10px;
+
+
+  :global {
+    .MuiSlider-markLabel {
+      color: $tg-theme-accent;
+    }
+
+    }
+  }
+
+.sliderLabels {
+  display: flex;
+  position: relative;
+  width: 100%;
+  justify-content: space-between;
+
+  .minLabel, .maxLabel {
+    display: flex;
+    position: absolute;
+  }
+
+  .minLabel {
+    left: 0;
+    transform: translateX(calc(-50% + 12px));
+  }
+
+  .maxLabel {
+    right: 0;
+    transform: translateX(calc(50% - 12px));
+  }
+}
+
+.muiSliderThumbInvisible {
+  opacity: 0 !important;
+}

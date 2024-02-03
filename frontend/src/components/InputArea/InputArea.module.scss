@@ -1,0 +1,67 @@
+@import "../../assets/styles/variables";
+
+.textFieldWrapper {
+  & + & {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+
+
+.textField {
+  :global {
+    background: $tg-theme-secondary-bg;
+      margin-bottom: 20px; // Добавляет отступ снизу для каждого TextField
+
+    border-radius: 12px;
+
+
+
+    .MuiOutlinedInput-root .MuiOutlinedInput-input {
+      font-weight: $font-weight-regular;
+      font-size: 14px;
+
+
+
+      color: $tg-theme-text;
+
+
+
+
+    }
+
+    .MuiInputLabel-outlined.Mui-focused {
+      font-weight: $font-weight-regular;
+      color: $tg-theme-text;
+      border-radius: 12px;
+
+
+
+    }
+
+
+    .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+      border-radius: 12px;
+      border-color: $tg-theme-accent;
+    }
+
+    .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border-radius: 12px;
+      border-color: $tg-theme-accent;
+    }
+
+    .MuiOutlinedInput-root .MuiInputBase-input::placeholder {
+      font-weight: $font-weight-regular;
+      color: $tg-theme-text;
+      opacity: 1;
+
+
+    }
+
+    .MuiInputLabel-outlined {
+
+      font-weight: $font-weight-regular;
+      color: $tg-theme-text;    }
+  }
+}

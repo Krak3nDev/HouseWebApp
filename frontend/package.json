@@ -12,8 +12,15 @@
   "dependencies": {
     "eslint-plugin-react": "^7.33.2",
     "react": "^18.2.0",
+    "react-use": "latest",
     "react-dom": "^18.2.0",
-    "sass": "^1.69.5"
+    "react-router-dom": "latest",
+    "sass": "^1.69.5",
+    "@mui/material": "latest",
+"@emotion/react": "latest",
+"@emotion/styled": "latest",
+"@mui/icons-material": "latest",
+    "@vkruglikov/react-telegram-web-app": "latest"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

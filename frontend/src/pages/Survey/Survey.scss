@@ -1,0 +1,34 @@
+@import "../../assets/styles/variables";
+
+.survey-page {
+  text-align: center;
+
+  &__title {
+    font-size: 18px;
+    color: $tg-theme-subtitle-text;
+    font-weight: $font-weight-bold;
+    margin-bottom: 10px;
+  }
+
+  &__rating-label {
+    padding-bottom: 10px;
+  }
+
+  &__text {
+    font-size: 14px;
+    color: $tg-theme-text;
+    font-weight: $font-weight-regular;
+    text-align: left;
+    margin-left: 7px;
+    margin-bottom: 12px;
+  }
+
+  &__italic-text { // Додаємо або оновлюємо цей клас для курсивного тексту
+    font-style: italic; // Зробити текст курсивом
+    font-size: 12px; // Або будь-який розмір шрифту, який вам потрібен
+    color: $tg-theme-hint; // Використовуємо колір тексту зі змінних (змініть на своє значення, якщо потрібно)
+    margin-bottom: 10px; // Додаємо відступ знизу для відокремлення від наступних елементів
+    text-align: center; // Вирівнювання тексту зліва
+    padding-left: 15px;
+  }
+}

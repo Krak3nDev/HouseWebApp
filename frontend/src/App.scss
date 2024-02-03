@@ -1,0 +1,61 @@
+@import "./assets/styles/variables.scss";
+
+body {
+  min-height: 100vh;
+  min-width: 90vw;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('./assets/fonts/OpenSans.ttf') format('truetype');
+}
+
+
+:root {
+  font-family: "Open Sans", sans-serif;
+  scroll-behavior: smooth;
+  background-color: $tg-theme-bg;
+  color: $tg-theme-text;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+h1,
+h2,
+h3,
+div,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+img {
+  opacity: 0.8;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.letter-spacing {
+  letter-spacing: 1px;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+ul {
+  padding-left: 15px;
+}
+
+.destructive {
+  color: $tg-theme-destructive-text;
+}
