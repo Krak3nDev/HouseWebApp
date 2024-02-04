@@ -7,6 +7,7 @@ import ReturnButton from "../../components/ReturnButton/ReturnButton.tsx"
 import "./Survey.scss"
 import {COMMON_LABELS} from "../../constants/texts.ts"
 import { useShowPopup } from "@vkruglikov/react-telegram-web-app"
+import {collectData, sendDataToAPI, SurveyData} from "../../utils/tools.ts"
 
 
 const SurveyPage: React.FC<SurveyPageProps> = ({
@@ -50,21 +51,32 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
     }
 
 
-    const handleNextOrSubmit = () => {
+    const handleNextOrSubmit = async () => {
         setQualityRating(localCurrentRating)
         setPositiveFeedback(localPositiveFeedback)
         setNegativeFeedback(localNegativeFeedback)
 
         if (isFinalPage) {
-            void showPopup({
-                message: "Дякуємо за участь!",
-            }).then(() => {
+            const dataToSend: SurveyData = collectData()
+
+            console.log("Data to send:", dataToSend)
+
+            try {
+                await sendDataToAPI(dataToSend)
+
+                await showPopup({
+                    message: "Дякуємо за участь!",
+                })
+
                 window.Telegram.WebApp.close()
-            })
+            } catch (error) {
+                console.error("Failed to send survey data:", error)
+            }
         } else if (onNextStep) {
             navigate(onNextStep)
         }
     }
+
 
 
     return (

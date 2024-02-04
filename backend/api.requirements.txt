@@ -1,0 +1,7 @@
+sqlalchemy
+alembic
+fastapi
+asyncpg
+uvicorn
+environs
+betterlogging
