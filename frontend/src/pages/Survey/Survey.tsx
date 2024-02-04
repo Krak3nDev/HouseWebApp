@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import ReturnButton from "../../components/ReturnButton/ReturnButton.tsx"
 import "./Survey.scss"
 import {COMMON_LABELS} from "../../constants/texts.ts"
+import { useShowPopup } from "@vkruglikov/react-telegram-web-app"
 
 
 const SurveyPage: React.FC<SurveyPageProps> = ({
@@ -21,12 +22,18 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
     negativeFeedback,
     setNegativeFeedback,
     showReturnButton,
+    isFinalPage = false,
 }) => {
     const navigate = useNavigate()
+    const showPopup = useShowPopup()
+
 
     const [localCurrentRating, setLocalCurrentRating] = useState<number | undefined>(qualityRating)
     const [localPositiveFeedback, setLocalPositiveFeedback] = useState<string>(positiveFeedback)
     const [localNegativeFeedback, setLocalNegativeFeedback] = useState<string>(negativeFeedback)
+
+
+
 
     const handlePositiveFeedbackChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setLocalPositiveFeedback(event.target.value)
@@ -42,12 +49,23 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
         }
     }
 
-    const handleNext = () => {
-        if (localCurrentRating !== undefined) setQualityRating(localCurrentRating)
+
+    const handleNextOrSubmit = () => {
+        setQualityRating(localCurrentRating)
         setPositiveFeedback(localPositiveFeedback)
         setNegativeFeedback(localNegativeFeedback)
-        navigate(onNextStep)
+
+        if (isFinalPage) {
+            void showPopup({
+                message: "Дякуємо за участь!",
+            }).then(() => {
+                window.Telegram.WebApp.close()
+            })
+        } else if (onNextStep) {
+            navigate(onNextStep)
+        }
     }
+
 
     return (
         <div className="survey-page">
@@ -76,8 +94,8 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
 
             {localCurrentRating !== undefined && (
                 <MainButton
-                    text="Далі"
-                    onClick={handleNext}
+                    text={isFinalPage ? "Відправити" : "Далі"}
+                    onClick={handleNextOrSubmit}
                 />
             )}
             {showReturnButton && <ReturnButton />}

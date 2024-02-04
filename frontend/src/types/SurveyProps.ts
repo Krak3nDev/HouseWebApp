@@ -2,7 +2,7 @@ interface SurveyPageProps {
     title?: string;
     subtitle?: string;
     ratingLabel: string;
-    onNextStep: string;
+    onNextStep?: string;
     italicSubtitle?: string;
     qualityRating: number | undefined;
     setQualityRating: (rating: number | undefined) => void;
@@ -11,4 +11,5 @@ interface SurveyPageProps {
     negativeFeedback: string;
     setNegativeFeedback: (feedback: string) => void;
     showReturnButton?: boolean;
+    isFinalPage?: boolean;
 }

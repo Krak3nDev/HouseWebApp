@@ -76,6 +76,8 @@ function App() {
                 setPositiveFeedback={setPositiveFeedbackPage3}
                 negativeFeedback={negativeFeedbackPage3}
                 setNegativeFeedback={setNegativeFeedbackPage3}
+                isFinalPage={true}
+
 
             />
 
