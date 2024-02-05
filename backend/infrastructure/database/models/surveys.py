@@ -1,6 +1,4 @@
-from typing import Optional
-
-from sqlalchemy import ForeignKey, Integer, Text, Boolean, true, String
+from sqlalchemy import ForeignKey, Boolean, true, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from infrastructure.database.models import Base

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, {useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import Slider from "@mui/material/Slider"
 import Typography from "@mui/material/Typography"
@@ -20,6 +20,8 @@ const marks = Array.from({ length: MAX - MIN + 1 }, (_, i) => ({
 
 const RatingScale: React.FC<RatingScaleProps> = ({ name, onRatingChange, value }) => {
     const [sliderValue, setSliderValue] = useState<number | undefined>(value)
+
+
 
     const handleChange = (newValue: number | number[]) => {
         if (typeof newValue === "number") {
