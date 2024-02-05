@@ -1,17 +1,37 @@
-import React, { useState } from "react"
+import React, {ChangeEvent, useEffect, useState} from "react"
 import RatingScale from "../../components/RatingScale/RatingScale"
 import InputArea from "../../components/InputArea/InputArea"
 import { MainButton } from "@vkruglikov/react-telegram-web-app"
 import { useNavigate } from "react-router-dom"
+import ReturnButton from "../../components/ReturnButton/ReturnButton.tsx"
 import "./Survey.scss"
-import ReturnButton from "../../components/ReturnButton/ReturnButton.tsx" // Переконайтеся, що шлях до компоненту вірний
+import {COMMON_LABELS} from "../../constants/texts.ts"
+import { useShowPopup } from "@vkruglikov/react-telegram-web-app"
+import {collectData, sendDataToAPI, SurveyData} from "../../utils/tools.ts"
+import {surveyPages} from "../../constants/routes.ts"
+import {useSessionStorage} from "react-use"
+import {useSurveyPageStorage} from "../../hooks/useSurveyPageStorage.ts"
 
-function SurveyPage({
+
+const logSessionStorage = (page) => {
+    console.log(`Session Storage for Page ${page}:`, {
+        qualityRating: sessionStorage.getItem(`qualityRating-${page}`),
+        positiveFeedback: sessionStorage.getItem(`positiveFeedback-${page}`),
+        negativeFeedback: sessionStorage.getItem(`negativeFeedback-${page}`)
+    })
+}
+
+const SurveyPage: React.FC<SurveyPageProps> = ({
+    page,
+    path,
     title,
     subtitle,
     ratingLabel,
     onNextStep,
+    italicSubtitle,
     showReturnButton,
+    isFinalPage,
+    ...storageProps
 }) {
     const [qualityRating, setQualityRating] = useState(null)
     const [positiveFeedback, setPositiveFeedback] = useState("")
@@ -20,17 +40,62 @@ function SurveyPage({
     const positiveLabel = "Що Вам найбільше подобається в роботі Bona Vita?"
     const negativeLabel = "Що Вам найбільше не подобається в роботі Bona Vita?"
     const navigate = useNavigate()
-    const [currentRating, setCurrentRating] = useState(qualityRating)
+    const showPopup = useShowPopup()
 
-    const handleNext = () => {
-        setQualityRating(currentRating)
-        setPositiveFeedback(positiveFeedback)
-        setNegativeFeedback(negativeFeedback)
 
-        console.log(onNextStep)
+    const { qualityRating, setQualityRating, positiveFeedback, setPositiveFeedback, negativeFeedback, setNegativeFeedback } = useSurveyPageStorage(page)
 
-        navigate(onNextStep)
+
+    const handlePositiveFeedbackChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setPositiveFeedback(event.target.value)
     }
+
+    const handleNegativeFeedbackChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setNegativeFeedback(event.target.value)
+    }
+
+    const handleRatingChange = (newValue: number | number[]) => {
+        if (typeof newValue === "number") {
+            setQualityRating(newValue)
+        }
+    }
+
+
+    const handleNextOrSubmit = async () => {
+        if (isFinalPage) {
+            const dataToSend: SurveyData = collectData()
+
+            console.log("Data to send:", dataToSend)
+
+            try {
+                await sendDataToAPI(dataToSend)
+
+                await showPopup({
+                    message: "Дякуємо за участь!",
+                })
+
+                window.Telegram.WebApp.close()
+            } catch (error) {
+                console.error("Failed to send survey data:", error)
+            }
+        } else {
+            storageProps.setQualityRating(qualityRating)
+            storageProps.setPositiveFeedback(positiveFeedback)
+            storageProps.setNegativeFeedback(negativeFeedback)
+
+
+
+            const currentPageIndex = surveyPages.findIndex(page => page.path === path)
+            const nextPage = surveyPages[currentPageIndex + 1]
+            if (nextPage) {
+                navigate(nextPage.path)
+            }
+        }
+    }
+
+
+
+
 
     return (
         <div className="survey-page">
@@ -42,24 +107,29 @@ function SurveyPage({
                 </div>
             )}
 
+
             <RatingScale
                 name="quality"
-                onRatingChange={setCurrentRating}
+                value={qualityRating}
+                onRatingChange={handleRatingChange}
             />
+
             <InputArea
-                label={positiveLabel}
+                label={COMMON_LABELS.positiveLabel}
                 value={positiveFeedback}
-                onChange={(e) => setPositiveFeedback(e.target.value)}
+                onChange={handlePositiveFeedbackChange}
             />
+
             <InputArea
-                label={negativeLabel}
+                label={COMMON_LABELS.negativeLabel}
                 value={negativeFeedback}
-                onChange={(e) => setNegativeFeedback(e.target.value)}
+                onChange={handleNegativeFeedbackChange}
             />
-            {currentRating !== null && (
+
+            {qualityRating !== undefined && (
                 <MainButton
-                    text="Далі"
-                    onClick={handleNext}
+                    text={isFinalPage ? "Відправити" : "Далі"}
+                    onClick={handleNextOrSubmit}
                 />
             )}
             {showReturnButton && <ReturnButton />}

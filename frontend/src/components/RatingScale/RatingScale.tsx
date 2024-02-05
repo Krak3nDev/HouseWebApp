@@ -1,8 +1,14 @@
-import React, { useState } from "react"
+import React, {useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import Slider from "@mui/material/Slider"
 import Typography from "@mui/material/Typography"
 import styles from "./RatingScale.module.scss"
+
+interface RatingScaleProps {
+  name: string;
+  onRatingChange: (value: number | number[]) => void;
+  value: number | undefined;
+}
 
 const MAX = 10
 const MIN = 0
@@ -12,40 +18,42 @@ const marks = Array.from({ length: MAX - MIN + 1 }, (_, i) => ({
     label: `${i + MIN}`,
 }))
 
-function RatingScale({ name, onRatingChange }) {
-    const [value, setValue] = useState(null)
+const RatingScale: React.FC<RatingScaleProps> = ({ name, onRatingChange, value }) => {
+    const [sliderValue, setSliderValue] = useState<number | undefined>(value)
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue)
-        if (onRatingChange) {
-            onRatingChange(newValue)
+
+
+    const handleChange = (newValue: number | number[]) => {
+        if (typeof newValue === "number") {
+            setSliderValue(newValue)
+            if (onRatingChange) {
+                onRatingChange(newValue)
+            }
         }
     }
-
-    const thumbStyle = value === null ? { visibility: "hidden" } : {}
+    const thumbStyle = sliderValue === undefined ? { visibility: "hidden" } : {}
 
     return (
         <div className={styles.ratingScale}>
-            {/* Label тепер видалений, тому тут його немає */}
             <div className={styles.sliderLabels}>
                 <Typography
                     variant="body2"
                     className="minLabel"
-                    onClick={() => handleChange(null, MIN)}
+                    onClick={() => handleChange(MIN)}
                     sx={{ cursor: "pointer" }}
                 >
-                    Min
+          Min
                 </Typography>
                 <Box sx={{ width: "100%", px: 2 }}>
                     <Slider
                         name={name}
                         marks={marks}
                         step={1}
-                        value={value === null ? MIN : value}
+                        value={sliderValue ?? MIN}
                         valueLabelDisplay="auto"
                         min={MIN}
                         max={MAX}
-                        onChange={handleChange}
+                        onChange={(_, newValue) => handleChange(newValue)}
                         sx={{
                             marginX: "auto",
                             "& .MuiSlider-thumb": thumbStyle,
@@ -55,10 +63,10 @@ function RatingScale({ name, onRatingChange }) {
                 <Typography
                     variant="body2"
                     className="maxLabel"
-                    onClick={() => handleChange(null, MAX)}
+                    onClick={() => handleChange(MAX)}
                     sx={{ cursor: "pointer" }}
                 >
-                    Max
+          Max
                 </Typography>
             </div>
         </div>

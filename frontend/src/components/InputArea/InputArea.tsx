@@ -12,10 +12,10 @@ function InputArea({ label, value, onChange }) {
                 multiline
                 rows={4}
                 variant="outlined"
+                value={value}
+                onChange={onChange}
                 fullWidth
                 className={styles.textField}
-                value={value}
-                onChange={onChange} 
             />
         </div>
     )

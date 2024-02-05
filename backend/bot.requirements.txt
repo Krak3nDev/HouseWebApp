@@ -1,0 +1,7 @@
+aiogram~=3.0
+environs~=9.0
+redis
+betterlogging
+sqlalchemy
+asyncpg
+alembic

@@ -4,6 +4,10 @@ import {ROUTES} from "./constants/routes.ts"
 import SurveyPage from "./pages/Survey/Survey.tsx"
 import { useSessionStorage } from "react-use"
 
+import {surveyPages} from "./constants/routes.ts"
+import SurveyPageRoute from "./components/SurveyPageRoute/SurveyPageRoute.tsx"
+
+
 
 function App() {
 
@@ -27,6 +31,15 @@ function App() {
                 <Route
                     path="/"
                     element={<SurveyStarterPage/>} />
+                {surveyPages.map((page, index) => (
+                    <Route
+                        key={index}
+                        path={page.path}
+                        element={<SurveyPageRoute
+                            page={index + 1}
+                            {...page} />}
+                    />
+                ))}
             </Routes>
         </BrowserRouter>
     )
