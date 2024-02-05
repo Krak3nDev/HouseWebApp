@@ -11,17 +11,14 @@ function SurveyPage({
     subtitle,
     ratingLabel,
     onNextStep,
-    qualityRating,
-    setQualityRating,
-    positiveFeedback,
-    setPositiveFeedback,
-    negativeFeedback,
-    setNegativeFeedback,
-    italicSubtitle,
     showReturnButton,
 }) {
-    const positiveLabel = "Що Вам подобається найбільше?"
-    const negativeLabel = "Що Вам не подобається найбільше?"
+    const [qualityRating, setQualityRating] = useState(null)
+    const [positiveFeedback, setPositiveFeedback] = useState("")
+    const [negativeFeedback, setNegativeFeedback] = useState("")
+    
+    const positiveLabel = "Що Вам найбільше подобається в роботі Bona Vita?"
+    const negativeLabel = "Що Вам найбільше не подобається в роботі Bona Vita?"
     const navigate = useNavigate()
     const [currentRating, setCurrentRating] = useState(qualityRating)
 
@@ -44,7 +41,6 @@ function SurveyPage({
                     {ratingLabel}
                 </div>
             )}
-            {italicSubtitle && <p className="survey-page__italic-text">{italicSubtitle}</p>}
 
             <RatingScale
                 name="quality"

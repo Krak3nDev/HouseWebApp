@@ -17,9 +17,9 @@
     "react-router-dom": "latest",
     "sass": "^1.69.5",
     "@mui/material": "latest",
-"@emotion/react": "latest",
-"@emotion/styled": "latest",
-"@mui/icons-material": "latest",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/icons-material": "latest",
     "@vkruglikov/react-telegram-web-app": "latest"
   },
   "devDependencies": {
