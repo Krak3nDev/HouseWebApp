@@ -27,13 +27,18 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
     title,
     subtitle,
     ratingLabel,
+    onNextStep,
     italicSubtitle,
     showReturnButton,
     isFinalPage,
     ...storageProps
-}) => {
-
-
+}) {
+    const [qualityRating, setQualityRating] = useState(null)
+    const [positiveFeedback, setPositiveFeedback] = useState("")
+    const [negativeFeedback, setNegativeFeedback] = useState("")
+    
+    const positiveLabel = "Що Вам найбільше подобається в роботі Bona Vita?"
+    const negativeLabel = "Що Вам найбільше не подобається в роботі Bona Vita?"
     const navigate = useNavigate()
     const showPopup = useShowPopup()
 
@@ -96,8 +101,13 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
         <div className="survey-page">
             {title && <h1 className="survey-page__title">{title}</h1>}
             {subtitle && <p className="survey-page__text">{subtitle}</p>}
-            {ratingLabel && <div className="survey-page__rating-label">{ratingLabel}</div>}
-            {italicSubtitle && <p className="survey-page__italic-text">{italicSubtitle}</p>}
+            {ratingLabel && (
+                <div className="survey-page__rating-label">
+                    {ratingLabel}
+                </div>
+            )}
+
+
             <RatingScale
                 name="quality"
                 value={qualityRating}
