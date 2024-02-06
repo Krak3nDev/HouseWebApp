@@ -5,3 +5,4 @@ betterlogging
 sqlalchemy
 asyncpg
 alembic
+aiogram-dialog
