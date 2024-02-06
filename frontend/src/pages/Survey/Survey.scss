@@ -25,6 +25,10 @@
     text-align: center;
     line-height: 25px;
     margin-bottom: 12px;
+
+    &--size {
+      font-size: 18px;
+    }
   }
 
   &__italic-text { // Додаємо або оновлюємо цей клас для курсивного тексту
@@ -35,4 +39,16 @@
     text-align: center; // Вирівнювання тексту зліва
     padding-left: 15px;
   }
+}
+
+// .Mui button set tg-backround
+.MuiButton-root {
+  background-color: $tg-theme-accent;
+  color: $tg-theme-text;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: $font-weight-bold;
+  text-transform: none;
+  transition: 0.3s;
 }

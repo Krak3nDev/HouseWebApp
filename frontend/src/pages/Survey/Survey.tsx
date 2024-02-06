@@ -1,50 +1,44 @@
-import React, {ChangeEvent, useEffect, useState} from "react"
+import React, {ChangeEvent, useEffect, useRef, useState} from "react"
 import RatingScale from "../../components/RatingScale/RatingScale"
 import InputArea from "../../components/InputArea/InputArea"
-import { MainButton } from "@vkruglikov/react-telegram-web-app"
 import { useNavigate } from "react-router-dom"
 import ReturnButton from "../../components/ReturnButton/ReturnButton.tsx"
 import "./Survey.scss"
 import {COMMON_LABELS} from "../../constants/texts.ts"
-import { useShowPopup } from "@vkruglikov/react-telegram-web-app"
+import { useShowPopup, useWebApp } from "@vkruglikov/react-telegram-web-app"
 import {collectData, sendDataToAPI, SurveyData} from "../../utils/tools.ts"
 import {surveyPages} from "../../constants/routes.ts"
-import {useSessionStorage} from "react-use"
-import {useSurveyPageStorage} from "../../hooks/useSurveyPageStorage.ts"
+import { Button } from "@mui/material"
+import { useBlockSwipe } from "../../hooks/useBlockSwipe.ts"
 
-
-const logSessionStorage = (page) => {
-    console.log(`Session Storage for Page ${page}:`, {
-        qualityRating: sessionStorage.getItem(`qualityRating-${page}`),
-        positiveFeedback: sessionStorage.getItem(`positiveFeedback-${page}`),
-        negativeFeedback: sessionStorage.getItem(`negativeFeedback-${page}`)
-    })
-}
 
 const SurveyPage: React.FC<SurveyPageProps> = ({
     page,
     path,
     title,
     subtitle,
+    description,
     ratingLabel,
     onNextStep,
-    italicSubtitle,
     showReturnButton,
     isFinalPage,
     ...storageProps
-}) {
-    const [qualityRating, setQualityRating] = useState(null)
+}) => {
+
+    const WebApp = useWebApp()
+    const [qualityRating, setQualityRating] = useState<undefined|number>(undefined)
     const [positiveFeedback, setPositiveFeedback] = useState("")
     const [negativeFeedback, setNegativeFeedback] = useState("")
     
-    const positiveLabel = "Що Вам найбільше подобається в роботі Bona Vita?"
-    const negativeLabel = "Що Вам найбільше не подобається в роботі Bona Vita?"
     const navigate = useNavigate()
     const showPopup = useShowPopup()
+    const sliderRef = useRef(null)
+    useBlockSwipe(sliderRef)
 
 
-    const { qualityRating, setQualityRating, positiveFeedback, setPositiveFeedback, negativeFeedback, setNegativeFeedback } = useSurveyPageStorage(page)
-
+    useEffect(() => {
+        WebApp.expand()
+    }, [])
 
     const handlePositiveFeedbackChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setPositiveFeedback(event.target.value)
@@ -59,6 +53,7 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
             setQualityRating(newValue)
         }
     }
+
 
 
     const handleNextOrSubmit = async () => {
@@ -83,8 +78,6 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
             storageProps.setPositiveFeedback(positiveFeedback)
             storageProps.setNegativeFeedback(negativeFeedback)
 
-
-
             const currentPageIndex = surveyPages.findIndex(page => page.path === path)
             const nextPage = surveyPages[currentPageIndex + 1]
             if (nextPage) {
@@ -93,32 +86,30 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
         }
     }
 
-
-
-
-
     return (
         <div className="survey-page">
             {title && <h1 className="survey-page__title">{title}</h1>}
-            {subtitle && <p className="survey-page__text">{subtitle}</p>}
+            {subtitle && <p className="survey-page__text--size">{subtitle}</p>}
+            {description && <p className="survey-page__text">{description}</p>}
             {ratingLabel && (
                 <div className="survey-page__rating-label">
                     {ratingLabel}
                 </div>
             )}
 
-
+            <div ref={sliderRef}>
             <RatingScale
                 name="quality"
                 value={qualityRating}
                 onRatingChange={handleRatingChange}
             />
-
-            <InputArea
-                label={COMMON_LABELS.positiveLabel}
-                value={positiveFeedback}
-                onChange={handlePositiveFeedbackChange}
-            />
+            </div>
+                
+                <InputArea
+                    label={COMMON_LABELS.positiveLabel}
+                    value={positiveFeedback}
+                    onChange={handlePositiveFeedbackChange}
+                />
 
             <InputArea
                 label={COMMON_LABELS.negativeLabel}
@@ -127,11 +118,11 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
             />
 
             {qualityRating !== undefined && (
-                <MainButton
-                    text={isFinalPage ? "Відправити" : "Далі"}
-                    onClick={handleNextOrSubmit}
-                />
+                <Button variant="contained" onClick={handleNextOrSubmit}>
+                    {isFinalPage ? "Відправити" : "Далі"}
+                </Button>
             )}
+
             {showReturnButton && <ReturnButton />}
         </div>
     )

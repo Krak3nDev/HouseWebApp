@@ -1,9 +1,9 @@
 // InputArea.js
-import React from "react"
 import TextField from "@mui/material/TextField"
 import styles from "./InputArea.module.scss"
 
-function InputArea({ label, value, onChange }) {
+function InputArea({ label, value, onChange}) {
+
     return (
         <div className={styles.textFieldWrapper}>
             <TextField

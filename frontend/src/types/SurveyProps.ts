@@ -1,9 +1,11 @@
 interface SurveyPageProps {
+    page?: number;
+    path?: string;
     title?: string;
     subtitle?: string;
+    description?: string;
     ratingLabel: string;
     onNextStep?: string;
-    italicSubtitle?: string;
     qualityRating: number | undefined;
     setQualityRating: (rating: number | undefined) => void;
     positiveFeedback: string;
