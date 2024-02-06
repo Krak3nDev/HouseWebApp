@@ -25,7 +25,7 @@ class SurveyRepo(BaseRepo):
                 "building_id": survey.building_id,
                 "opened": survey.opened,
                 "survey_type": survey.survey_type,
-                "formatted_created_at": survey.created_at.strftime("%d-%m-%Y %H:%M") if survey.created_at else None,
+                "formatted_created_at": survey.created_at.strftime("%d-%m-%Y %H:%M")
             }
             for survey in surveys
         ]
