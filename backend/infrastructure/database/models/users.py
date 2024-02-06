@@ -8,7 +8,6 @@ from infrastructure.database.models.base import TimestampMixin, int_pk, TableNam
 
 
 class User(Base, TimestampMixin, TableNameMixin):
-    user_id: Mapped[int_pk]
-    phone: Mapped[Optional[str]] = mapped_column(String(256))
-    email: Mapped[Optional[str]] = mapped_column(String(256))
+    user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
+    telegram_id: Mapped[Optional[int]]
 
