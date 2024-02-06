@@ -8,9 +8,9 @@ from infrastructure.database.repo.base import BaseRepo
 
 class SurveyFeedbackRepo(BaseRepo):
     async def insert_survey_feedback(self, user_id: int, building_id: int, survey_id: int,
-                                     question1: str, question2: Optional[str], question3: Optional[str],
-                                     question4: str, question5: Optional[str], question6: Optional[str],
-                                     question7: str, question8: Optional[str], question9: Optional[str]) -> None:
+                                     question1: int, question2: Optional[str], question3: Optional[str],
+                                     question4: int, question5: Optional[str], question6: Optional[str],
+                                     question7: int, question8: Optional[str], question9: Optional[str]) -> None:
         query = insert(SurveyFeedback).values(
             user_id=user_id,
             building_id=building_id,

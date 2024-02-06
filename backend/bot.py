@@ -5,9 +5,12 @@ import betterlogging as bl
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import RedisStorage, DefaultKeyBuilder
+from aiogram_dialog import setup_dialogs
 
 from config import load_config
 from infrastructure.database.setup import create_engine, create_session_pool
+from tgbot.dialogs import dialogs_list
+from tgbot.dialogs.admin import admin_menu
 from tgbot.handlers import routers_list
 from tgbot.middlewares.database import DatabaseMiddleware
 from tgbot.services import broadcaster
@@ -92,7 +95,9 @@ async def main():
     dp.workflow_data.update(
         config=config,
     )
-    dp.include_routers(*routers_list)
+    dp.include_routers(*routers_list, *dialogs_list)
+
+    setup_dialogs(dp)
 
     register_global_middlewares(dp, session_pool)
 
