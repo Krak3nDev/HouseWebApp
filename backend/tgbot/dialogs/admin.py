@@ -1,3 +1,6 @@
+import logging
+
+from aiogram import Bot
 from aiogram.types import CallbackQuery
 from aiogram_dialog import Dialog, Window, DialogManager, ShowMode
 from aiogram_dialog.widgets.kbd import ScrollingGroup, Select, Start, Cancel, Back, Button
@@ -6,6 +9,7 @@ from aiogram_dialog.widgets.text import Const, Format
 from infrastructure.database.repo.requests import RequestsRepo
 from tgbot.dialogs.getters import get_houses, get_building_name, get_all_surveys, get_survey_date
 from tgbot.dialogs.states import AdminStates, Buildings, Survey
+from tgbot.utils.generate_links import generate_random_deep_link
 
 
 async def update_house_id(
@@ -25,11 +29,23 @@ async def update_poll_type(
 async def create_survey(
         callback: CallbackQuery, button: Button,
         manager: DialogManager, **kwargs):
+    bot: Bot = manager.middleware_data.get("bot")
     manager.show_mode = ShowMode.SEND
     repo: RequestsRepo = manager.middleware_data.get("repo")
     building_id = int(manager.dialog_data["building_id"])
     poll_type = manager.dialog_data["poll_type"]
-    await repo.survey.add_survey(building_id, poll_type)
+
+    survey = await repo.survey.add_survey(building_id, poll_type)
+
+
+    me = await bot.get_me()
+    users = await repo.users.get_users()
+    if users:
+        new_users = generate_random_deep_link(users, me.username, survey, building_id)
+        await repo.survey_feedback.bulk_update_deep_link(new_users)
+
+
+
     await callback.message.answer("Опитування створено!")
     await manager.done()
 

@@ -1,0 +1,66 @@
+@import "../../assets/styles/variables";
+
+.centered-message {
+  color: $tg-theme-destructive-text;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  font-size: 24px;
+}
+
+
+
+
+.welcome_page {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 10px;
+  gap: 10px;
+
+  &__title {
+    font-size: 20px;
+    color: $tg-theme-subtitle-text;
+    font-weight: $font-weight-bold;
+    margin-bottom: 10px;
+  }
+
+  &__rating-label {
+    padding-bottom: 10px;
+  }
+
+  &__text {
+    font-size: 14px;
+    color: $tg-theme-text;
+    font-weight: $font-weight-regular;
+    text-align: center;
+    line-height: 25px;
+    margin-bottom: 12px;
+
+    &--size {
+      font-size: 18px;
+    }
+  }
+
+  &__italic-text {
+    font-style: italic;
+    font-size: 12px;
+    color: $tg-theme-hint;
+    margin-bottom: 10px;
+    text-align: center;
+    padding-left: 15px;
+  }
+}
+
+.MuiButton-root {
+  background-color: $tg-theme-accent;
+  color: $tg-theme-text;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: $font-weight-bold;
+  text-transform: none;
+  transition: 0.3s;
+}

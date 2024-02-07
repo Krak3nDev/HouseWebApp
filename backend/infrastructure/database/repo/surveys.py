@@ -6,13 +6,14 @@ from infrastructure.database.repo.base import BaseRepo
 
 
 class SurveyRepo(BaseRepo):
-    async def add_survey(self, building_id: int, survey_type: str):
+    async def add_survey(self, building_id: int, survey_type: str) -> int:
         statement = Insert(Survey).values(
             building_id=building_id,
             survey_type=survey_type
-        )
-        await self.session.execute(statement)
+        ).returning(Survey.survey_id)
+        result = await self.session.execute(statement)
         await self.session.commit()
+        return result.scalar()
 
     async def get_surveys(self):
         statement = select(Survey).where(Survey.opened.is_(true()))
@@ -45,3 +46,10 @@ class SurveyRepo(BaseRepo):
         result = await self.session.execute(statement)
         survey = result.scalar()
         return survey.created_at.strftime("%d-%m-%Y %H:%M")
+
+    async def get_survey_status(self, survey_id: int) -> bool:
+        statement = select(Survey).where(Survey.survey_id == survey_id)
+        result = await self.session.execute(statement)
+        survey = result.scalar()
+        if survey:
+            return survey.opened

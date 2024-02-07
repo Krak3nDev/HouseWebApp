@@ -18,7 +18,7 @@ export interface SurveyData {
 }
 
 interface ApiResponse {
-  status: string;
+  status: boolean;
 }
 
 export const collectData = (): SurveyData => {
@@ -51,5 +51,30 @@ export const sendDataToAPI = async (data: SurveyData): Promise<ApiResponse> => {
         } else {
             throw new Error("Помилка під час відправки даних")
         }
+    }
+}
+
+
+export const fetchSurveyStatus = async (surveyId: number): Promise<ApiResponse> => {
+    try {
+        const response = await axios.get<ApiResponse>(`${BASE_URL}survey_status?survey_id=${surveyId}`)
+        return response.data
+    } catch (error) {
+        const axiosError = error as AxiosError<ApiResponse>
+        if (axiosError.response?.data && typeof axiosError.response.data === "object") {
+            throw new Error(axiosError.response.data.status)
+        } else {
+            throw new Error("Error fetching survey status")
+        }
+    }
+}
+
+
+export const fetchSurveyFeedback = async (deepUrl: string): Promise<ApiResponse> => {
+    try {
+        const response = await axios.get<ApiResponse>(`${BASE_URL}survey_feedback?deep_url=${encodeURIComponent(deepUrl)}`)
+        return response.data
+    } catch (error) {
+        throw new Error("Error fetching survey feedback")
     }
 }

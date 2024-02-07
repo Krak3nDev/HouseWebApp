@@ -88,9 +88,6 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
 
     return (
         <div className="survey-page">
-            {title && <h1 className="survey-page__title">{title}</h1>}
-            {subtitle && <p className="survey-page__text--size">{subtitle}</p>}
-            {description && <p className="survey-page__text">{description}</p>}
             {ratingLabel && (
                 <div className="survey-page__rating-label">
                     {ratingLabel}
@@ -98,18 +95,18 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
             )}
 
             <div ref={sliderRef}>
-            <RatingScale
-                name="quality"
-                value={qualityRating}
-                onRatingChange={handleRatingChange}
-            />
+                <RatingScale
+                    name="quality"
+                    value={qualityRating}
+                    onRatingChange={handleRatingChange}
+                />
             </div>
                 
-                <InputArea
-                    label={COMMON_LABELS.positiveLabel}
-                    value={positiveFeedback}
-                    onChange={handlePositiveFeedbackChange}
-                />
+            <InputArea
+                label={COMMON_LABELS.positiveLabel}
+                value={positiveFeedback}
+                onChange={handlePositiveFeedbackChange}
+            />
 
             <InputArea
                 label={COMMON_LABELS.negativeLabel}
@@ -118,7 +115,9 @@ const SurveyPage: React.FC<SurveyPageProps> = ({
             />
 
             {qualityRating !== undefined && (
-                <Button variant="contained" onClick={handleNextOrSubmit}>
+                <Button
+                    variant="contained"
+                    onClick={handleNextOrSubmit}>
                     {isFinalPage ? "Відправити" : "Далі"}
                 </Button>
             )}

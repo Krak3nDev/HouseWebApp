@@ -5,3 +5,8 @@ export interface Window {
         };
     };
 }
+
+
+export interface InitDataUnsafe {
+  start_param?: string;
+}
